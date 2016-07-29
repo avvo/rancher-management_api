@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "rancher/api"
+
+# RANCHER_URL
+# RANCHER_ACCESS_KEY
+# RANCHER_SECRET_KEY
+Rancher::Api.setup!
+
+# You can add fixtures and/or initialization code here to make experimenting
+# with your gem easier. You can also use a different console, if you like.
+
+require "pry"
+require "pry-nav"
+require "pry-doc"
+Pry.start
