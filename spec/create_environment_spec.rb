@@ -53,35 +53,9 @@ describe CreateEnvironment do
       ).to_return(body: token_body, headers: {"Content-Type" => "application/json"})
     end
     let(:project_create_body) {
-        {
-          "swarm" => false,
-          "kubernetes" => false,
-          "mesos" => false,
-          "virtualMachine" => false,
-          "publicDns" => false,
-          "type" => "project",
-          "name" => "#{name}",
-          "projectMembers" => [
-            {
-              "externalId" => "1a7",
-              "externalIdType" => "rancher_id",
-              "login" => "#{username}",
-              "role" => "owner",
-              "id" => "rancher_id:1a7",
-              "type" => "identity"
-            }
-          ],
-          "members" => [
-            {
-              "externalId" => "1a7",
-              "externalIdType" => "rancher_id",
-              "login" => "#{username}",
-              "role" => "owner",
-              "id" => "rancher_id:1a7",
-              "type" => "identity"
-            }
-          ]
-        }
+      {
+        "name" => "#{name}",
+      }
     }
     let(:project_body) {
       <<-JSON
@@ -204,7 +178,6 @@ describe CreateEnvironment do
 
     let(:apikey_create_body) do
       {
-        type: "apikey",
         accountId: "1a12",
         name: name,
       }
