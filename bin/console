@@ -2,6 +2,7 @@
 
 require "bundler/setup"
 require "rancher/api"
+require_relative "../create_environment"
 
 # RANCHER_URL
 # RANCHER_ACCESS_KEY
