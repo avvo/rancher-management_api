@@ -102,4 +102,6 @@ RSpec.configure do |config|
 =end
 end
 
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+require 'rancher-management_api'
 require 'webmock/rspec'
