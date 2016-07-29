@@ -3,7 +3,7 @@ require "faraday"
 
 module Rancher
   module ManagementApi
-    def self.connection(host)
+    def self.connection(host = ENV["RANCHER_URL"])
       Faraday.new(url: host) do |faraday|
         faraday.headers["Content-Type"] = "application/json"
         faraday.headers["Accept"] = "application/json"
