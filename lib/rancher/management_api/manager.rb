@@ -3,8 +3,8 @@ module Rancher
     class Manager
       attr_reader :conn
 
-      def initialize(conn)
-        @conn = conn
+      def initialize(conn = nil, host: nil)
+        @conn = conn || ManagementApi.connection(host)
       end
 
       def create_project(name)
