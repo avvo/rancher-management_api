@@ -249,3 +249,14 @@ Response:
 ```
 
 The `publicValue` is the RANCHER_ACCESS_KEY, and the `secretValue` is the RANCHER_SECRET_KEY
+
+
+
+
+```
+manager = Rancher::ManagementApi::Token.build_manager(username, password)
+project = manager.create_project(...)
+api_key = project.create_api_key(...)
+api_key.access_key
+api_key.secret_key
+```

@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require "bundler/setup"
 require "rancher/api"
-require_relative "../create_environment"
+require "rancher/management_api"
 
 # RANCHER_URL
 # RANCHER_ACCESS_KEY
