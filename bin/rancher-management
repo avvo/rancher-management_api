@@ -1,0 +1,83 @@
+#!/usr/bin/env ruby
+
+$:.unshift(File.expand_path("../../lib", __FILE__))
+require 'rancher-management_api'
+require 'optparse'
+
+@options = {
+  uri: ENV["RANCHER_URI"],
+  username: ENV["RANCHER_USER"],
+  password: ENV["RANCHER_PASS"],
+  environment_name: ENV["ENVIRONMENT_NAME"],
+  key_name: ENV["KEY_NAME"],
+  output_format: ENV.fetch("OUTPUT_FORMAT", "json")
+}
+valid_output_formats = %w(json yml yaml)
+
+optparse = OptionParser.new do |opts|
+  opts.on("-h", "--host RANCHER_URI", "URI to reach the rancher API", "Example: http://rancher.foo.com/") do |arg|
+    @options[:uri] = arg.chomp
+  end
+  opts.on("-u", "--user RANCHER_USER", "User to use for authentication") do |arg|
+    @options[:username] = arg.chomp
+  end
+  opts.on("-p", "--pass RANCHER_PASS", "Password to use for authentication") do |arg|
+    @options[:password] = arg.chomp
+  end
+  opts.on("-e", "--environment ENVIRONMENT_NAME", "Name of the environment to create") do |arg|
+    @options[:environment_name] = arg.chomp
+  end
+  opts.on("-k", "--key KEY_NAME", "Name of the api key to create") do |arg|
+    @options[:key_name] = arg.chomp
+  end
+  opts.on("-f", "--format OUTPUT_FORMAT", "Format of the keys", "Valid options (#{valid_output_formats.join(", ")})", "Default: json") do |arg|
+    @options[:output_format] = arg.chomp
+  end
+end
+
+optparse.parse!
+
+
+errors = []
+errors.push("Must specify a rancher host with -h or RANCHER_URI environment variable") unless @options[:uri]
+errors.push("Must specify an environment name with -e or ENVIRONMENT_NAME environment variable") unless @options[:environment_name]
+errors.push("Must specify a key name with -k or KEY_NAME environment variable") unless @options[:key_name]
+errors.push("Output format must be one of (#{valid_output_formats.join(", ")})") unless valid_output_formats.include?(@options[:output_format])
+
+# validate the options
+if errors.any?
+  $stderr.puts "Cannot continue:"
+  errors.each do |msg|
+    $stderr.puts "\t#{msg}"
+  end
+  $stderr.puts optparse.help
+  exit(1)
+end
+
+# do the work
+manager = if @options[:username] && @options[:password]
+  Rancher::ManagementApi::Token.build_manager(
+    host: @options[:uri],
+    username: @options[:username],
+    password: @options[:password]
+  )
+else
+  Rancher::ManagementApi::Manager.new(
+    host: @options[:uri]
+  )
+end
+project = manager.create_project(@options[:environment_name])
+api_key = project.create_api_key(@options[:key_name])
+
+output = {
+  access_key: api_key.publicValue,
+  secret_key: api_key.secretValue
+}
+case @options[:output_format]
+when "json"
+  output = output.to_json
+when "yml", "yaml"
+  require 'yaml'
+  output = output.to_yaml
+end
+puts output
