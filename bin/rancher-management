@@ -77,7 +77,8 @@ registration_token = project.create_registration_token
 output = {
   access_key: api_key.publicValue,
   secret_key: api_key.secretValue,
-  registration_token: registration_token.token
+  registration_token: registration_token.token,
+  registration_command: registration_token.command
 }
 case @options[:output_format]
 when "json"
