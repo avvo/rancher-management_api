@@ -13,6 +13,17 @@ module Rancher
 
         data = JSON.parse(env_response.body)
 
+        # reload until the project is ready
+        while data["state"] == "registering"
+          sleep 0.5
+          url = data["links"]["self"]
+          response = conn.get do |req|
+            req.url url
+          end
+
+          data = JSON.parse(response.body)
+        end
+
         new(conn, data)
       end
 
@@ -25,6 +36,10 @@ module Rancher
 
       def create_api_key(name)
         ApiKey.create(self, name)
+      end
+
+      def create_registration_token
+        RegistrationToken.create(self)
       end
     end
   end
