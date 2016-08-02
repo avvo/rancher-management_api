@@ -15,6 +15,10 @@ require 'optparse'
 valid_output_formats = %w(json yml yaml)
 
 optparse = OptionParser.new do |opts|
+  opts.on_tail("--help", "Get usage info") do
+    puts opts
+    exit(1)
+  end
   opts.on("-h", "--host RANCHER_URI", "URI to reach the rancher API", "Example: http://rancher.foo.com/") do |arg|
     @options[:uri] = arg.chomp
   end
