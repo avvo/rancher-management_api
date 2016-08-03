@@ -6,6 +6,8 @@ RUN apk update && \
     apk add ruby-json && \
     rm -rf /var/cache/apk/*
 
+# bust cache when the version changes
+ADD lib/rancher/management_api/version.rb /tmp/
 RUN gem install -N rancher-management_api
 
 ENTRYPOINT ["rancher-management"]

@@ -72,10 +72,13 @@ else
 end
 project = manager.create_project(@options[:environment_name])
 api_key = project.create_api_key(@options[:key_name])
+registration_token = project.create_registration_token
 
 output = {
   access_key: api_key.publicValue,
-  secret_key: api_key.secretValue
+  secret_key: api_key.secretValue,
+  registration_token: registration_token.token,
+  registration_command: registration_token.command
 }
 case @options[:output_format]
 when "json"
