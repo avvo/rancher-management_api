@@ -10,4 +10,8 @@ RUN apk update && \
 ADD lib/rancher/management_api/version.rb /tmp/
 RUN gem install -N rancher-management_api
 
-ENTRYPOINT ["rancher-management"]
+RUN mkdir -p /srv/rancher-management_api
+WORKDIR /srv/rancher-management_api
+ADD . /srv/rancher-management_api
+
+ENTRYPOINT ["bin/rancher-management"]
