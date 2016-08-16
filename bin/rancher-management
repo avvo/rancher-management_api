@@ -75,6 +75,7 @@ api_key = project.create_api_key(@options[:key_name])
 registration_token = project.create_registration_token
 
 output = {
+  project_id: project.id,
   access_key: api_key.publicValue,
   secret_key: api_key.secretValue,
   registration_token: registration_token.token,
