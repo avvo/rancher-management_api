@@ -27,6 +27,15 @@ module Rancher
         new(conn, data)
       end
 
+      def self.find_by_name(conn, name)
+        response = conn.get "/v1/projects"
+        if data = JSON.parse(response.body)["data"].detect {|proj| proj["name"] == name}
+          new(conn, data)
+        else
+          nil
+        end
+      end
+
       attr_reader :conn
 
       def initialize(conn, data)

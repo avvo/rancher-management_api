@@ -10,6 +10,10 @@ module Rancher
       def create_project(name)
         Project.create(conn, name)
       end
+
+      def find_project_by_name(name)
+        Project.find_by_name(conn, name)
+      end
     end
   end
 end
